@@ -15,18 +15,14 @@ import { processOptimizer } from "./tools/optimizer.js";
 import { processCommentRemover } from "./tools/commentRemover.js";
 import { processCommentAdder } from "./tools/commentAdder.js";
 
-// auth middleware (your Node version you gave me)
 import { verifyInternalKey } from "./auth/internalApiKeyHandler.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// IMPORTANT: capture raw body for signature verification.
-// We use express.raw for the API routes that the gateway calls.
-// limit should be large enough to handle your MAX_LIMITS payloads.
+
 app.use("/api", express.raw({ type: "*/*", limit: "5mb" }));
 
-// Health endpoint (no auth required)
 app.get("/health", (req, res) => {
   res.json({
     success: true,
@@ -36,26 +32,22 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Generic handler for your endpoints to keep structure similar to worker
 app.post("/api/:tool", verifyInternalKey, async (req, res) => {
   const startTime = performance.now();
   try {
     const toolPath = `/api/${req.params.tool}`;
 
-    // 1. Parse body from raw buffer (req.body is Buffer because of express.raw)
     const bodyText = req.body && req.body.length ? req.body.toString("utf8") : "";
     const body = bodyText ? JSON.parse(bodyText) : {};
     const { input, userModel } = body;
 
     if (!input) throw new Error("Input payload is required");
 
-    // 2. Validate endpoint and input size
     const maxChars = MAX_LIMITS[toolPath];
     if (!maxChars) throw new Error(`Unknown endpoint: ${toolPath}`);
 
     const inputLength = validateInput(input, maxChars);
 
-    // 3. Dispatch to correct tool
     let resultData;
     let toolName = "";
 
@@ -100,7 +92,6 @@ app.post("/api/:tool", verifyInternalKey, async (req, res) => {
     const detectedLanguage = detectLanguage(input);
     const isDetector = toolName === "detector";
 
-    // 4. Build response (keep same meta shape as Worker)
     return res.json({
       success: true,
       result: isDetector ? null : resultData.content,
@@ -124,7 +115,6 @@ app.post("/api/:tool", verifyInternalKey, async (req, res) => {
   }
 });
 
-// fallback
 app.use((req, res) => {
   res.status(404).json({ success: false, error: "Not found" });
 });
