@@ -1,0 +1,55 @@
+// auth/internalApiKeyHandler.js
+import crypto from "crypto";
+
+const INTERNAL_SECRET = process.env.INTERNAL_API_KEY || "";
+
+export function verifyInternalKey(req, res, next) {
+  try {
+    const signature = req.headers["x-auth-signature"];
+    const timestamp = req.headers["x-auth-timestamp"];
+
+    if (!signature || !timestamp) {
+      return res.status(401).json({ error: "Missing auth headers" });
+    }
+
+    // 1. Replay Attack Check
+    const now = Date.now();
+    if (Math.abs(now - parseInt(timestamp, 10)) > 60000) {
+      return res.status(401).json({ error: "Request expired" });
+    }
+
+    // Ensure we have raw bytes
+    const rawBodyBuf = req.body && Buffer.isBuffer(req.body) ? req.body : Buffer.from("");
+
+    // attach for downstream handlers (compat with your original Node code)
+    req.rawBody = rawBodyBuf;
+
+    // 2. Reconstruct the Signature (timestamp + rawBody)
+    const hmac = crypto.createHmac("sha256", INTERNAL_SECRET);
+    hmac.update(timestamp);
+
+    if (req.rawBody && req.rawBody.length > 0) {
+      hmac.update(req.rawBody);
+    }
+
+    const calculatedSignature = hmac.digest("hex");
+
+    // 3. Compare
+    if (signature !== calculatedSignature) {
+      // DEBUG LOG: This will show up in your Render logs
+      console.log(
+        `SIG FAIL: Received ${String(signature).substring(0, 6)}... vs Calculated ${calculatedSignature.substring(
+          0,
+          6
+        )}...`
+      );
+      console.log(`Secret length: ${INTERNAL_SECRET.length}`);
+      return res.status(401).json({ error: "Invalid Signature" });
+    }
+
+    next();
+  } catch (err) {
+    console.error("Auth Error", err);
+    res.status(401).json({ error: "Authentication failed" });
+  }
+}
