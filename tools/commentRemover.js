@@ -1,4 +1,4 @@
-import { handleAIRequest } from "../utils/ai";
+import { handleAIRequest } from "../utils/ai.js";
 
 export async function processCommentRemover(input, userModel, env) {
   const SYSTEM_PROMPT = `

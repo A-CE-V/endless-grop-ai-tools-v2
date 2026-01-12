@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3000;
 // IMPORTANT: capture raw body for signature verification.
 // We use express.raw for the API routes that the gateway calls.
 // limit should be large enough to handle your MAX_LIMITS payloads.
-app.use("/api", express.raw({ type: "*/*", limit: "20mb" }));
+app.use("/api", express.raw({ type: "*/*", limit: "5mb" }));
 
 // Health endpoint (no auth required)
 app.get("/health", (req, res) => {
