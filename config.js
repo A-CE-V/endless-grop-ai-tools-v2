@@ -15,5 +15,5 @@ export const MAX_LIMITS = {
   "/api/comment-adder": 15_000,
   "/api/optimizer": 15_000,
   "/api/detector": 10_000,
-  "/api/explainer": 15_000
+  "/api/explainer": 20_000
 };
