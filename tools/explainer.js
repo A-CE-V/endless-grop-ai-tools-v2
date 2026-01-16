@@ -30,5 +30,5 @@ export async function processExplainer(input, userModel, env) {
   const apiKey = env.GROQ_API_KEY_5;
 
 
-  return await handleAIRequest(apiKey, SYSTEM_PROMPT, input, userModel, temperature = 0.8);
+  return await handleAIRequest(apiKey, SYSTEM_PROMPT, input, userModel, 0.8);
 }

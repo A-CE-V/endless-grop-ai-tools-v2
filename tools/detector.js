@@ -39,5 +39,5 @@ export async function processDetector(input, userModel, env) {
   // Explicitly use Key 4
   const apiKey = env.GROQ_API_KEY_4;
 
-  return await handleAIRequest(apiKey, SYSTEM_PROMPT, input, modelToUse, temperature = 0.5);
+  return await handleAIRequest(apiKey, SYSTEM_PROMPT, input, modelToUse, 0.5);
 }
