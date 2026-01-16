@@ -1,4 +1,4 @@
-// config.js
+
 export const CONFIG = {
   textModels: [
     "llama-3.3-70b-versatile",
@@ -11,8 +11,9 @@ export const CONFIG = {
 };
 
 export const MAX_LIMITS = {
-  "/api/comment-remover": 19_000,
+  "/api/comment-remover": 20_000,
   "/api/comment-adder": 15_000,
   "/api/optimizer": 15_000,
-  "/api/detector": 8_000,
+  "/api/detector": 10_000,
+  "/api/explainer": 15_000
 };

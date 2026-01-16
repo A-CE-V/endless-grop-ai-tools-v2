@@ -3,7 +3,7 @@ import { CONFIG } from "../config.js";
 import { stripMarkdownCodeFences } from "../helpers/codeFencesRemover.js";
 
 
-export async function handleAIRequest(apiKey, systemPrompt, input, userModel) {
+export async function handleAIRequest(apiKey, systemPrompt, input, userModel, temperature = 0.1, max_tokens = 4096) {
   let modelsToTry = userModel ? [userModel, ...CONFIG.textModels] : CONFIG.textModels;
   modelsToTry = [...new Set(modelsToTry)];
 
@@ -26,8 +26,8 @@ export async function handleAIRequest(apiKey, systemPrompt, input, userModel) {
             { role: "system", content: systemPrompt },
             { role: "user", content: input },
           ],
-          temperature: 0.1,
-          max_tokens: 4096,
+          temperature: temperature,
+          max_tokens: max_tokens,
         }),
       });
 

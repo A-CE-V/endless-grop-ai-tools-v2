@@ -14,6 +14,7 @@ import { processDetector } from "./tools/detector.js";
 import { processOptimizer } from "./tools/optimizer.js";
 import { processCommentRemover } from "./tools/commentRemover.js";
 import { processCommentAdder } from "./tools/commentAdder.js";
+import { processExplainer } from "./tools/explainer.js";
 
 import { verifyInternalKey } from "./auth/internalApiKeyHandler.js";
 
@@ -39,7 +40,7 @@ app.post("/api/:tool", verifyInternalKey, async (req, res) => {
 
     const bodyText = req.body && req.body.length ? req.body.toString("utf8") : "";
     const body = bodyText ? JSON.parse(bodyText) : {};
-    const { input, userModel } = body;
+    const { input, userModel, author, date, includeParamTags } = body;
 
     if (!input) throw new Error("Input payload is required");
 
@@ -79,9 +80,14 @@ app.post("/api/:tool", verifyInternalKey, async (req, res) => {
         resultData = await processCommentRemover(input, userModel, process.env);
         break;
 
+      case "/api/explainer":
+        toolName = "explainer";
+        resultData = await processExplainer(input, userModel, process.env);
+        break;
+
       case "/api/comment-adder":
         toolName = "commentAdd";
-        resultData = await processCommentAdder(input, userModel, process.env);
+        resultData = await processCommentAdder(input, userModel, process.env, {author, date, includeParamTags});
         break;
 
       default:
