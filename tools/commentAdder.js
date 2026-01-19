@@ -1,29 +1,22 @@
 // tools/commentAdder.js
 import { handleAIRequest } from "../utils/ai.js";
 
-export async function processCommentAdder(input, userModel, env = process.env, options = {}) {
-  const { 
-    author = "Unknown", 
-    date = "", 
-    includeParamTags = false 
-  } = options;
+export async function processCommentAdder(input, userModel, env = process.env, author = "Unknown", date = "", includeParamTags = false) {
 
-  // Build documentation requirements dynamically
   let docRequirements = "";
 
-  // Only add Author requirement if it's not "Unknown" or empty
   if (author && author !== "Unknown") {
     docRequirements += `\n- Author: ${author}`;
   }
 
-  // Only add Date requirement if a date was actually selected
   if (date && (date !== "WithoutDate" && date !== "")) {
     docRequirements += `\n- Date: ${date}`;
   }
 
-  // Add JSDoc/DocBlock tags if requested
   if (includeParamTags) {
     docRequirements += `\n- Include technical tags (e.g., @param {type} name, @returns {type}) for all functions.`;
+  }else{
+    docRequirements += `\n- DO NOT Include technical tags (e.g., @param {type} name, @returns {type}) for all functions.`;
   }
 
   const SYSTEM_PROMPT = `
