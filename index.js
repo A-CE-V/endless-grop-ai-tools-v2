@@ -22,7 +22,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 
-app.use("/api", express.json({ limit: "5mb" }));
+app.use(
+  "/api",
+  express.json({
+    limit: "5mb",
+    verify: (req, res, buf) => {
+      req.rawBody = buf;
+    },
+  })
+);
+
 
 app.get("/health", (req, res) => {
   res.json({

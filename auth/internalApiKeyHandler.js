@@ -19,7 +19,11 @@ export function verifyInternalKey(req, res, next) {
     }
 
     // Ensure we have raw bytes
-    const rawBodyBuf = req.body && Buffer.isBuffer(req.body) ? req.body : Buffer.from("");
+    const rawBodyBuf =
+      req.rawBody && Buffer.isBuffer(req.rawBody)
+        ? req.rawBody
+        : Buffer.from("");
+
 
     // attach for downstream handlers (compat with your original Node code)
     req.rawBody = rawBodyBuf;
