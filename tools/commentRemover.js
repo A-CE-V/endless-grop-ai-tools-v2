@@ -1,4 +1,4 @@
-import { SHARED_PROMPTS } from "../config.js";
+import { SHARED_PROMPTS, SHARED_RULES } from "../config.js";
 import { handleAIRequest } from "../utils/ai.js";
 
 export async function processCommentRemover(input, userModel, env) {
@@ -25,7 +25,7 @@ export async function processCommentRemover(input, userModel, env) {
     Return ONLY the cleaned raw source code.
     `;
 
-  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_PROMPTS
+  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_RULES
   
 
   const apiKey = env.GROQ_API_KEY_1;

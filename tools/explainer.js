@@ -1,5 +1,5 @@
 // tools/explainer.js
-import { SHARED_PROMPTS } from "../config.js";
+import { SHARED_PROMPTS, SHARED_RULES } from "../config.js";
 import { handleAIRequest } from "../utils/ai.js";
 
 
@@ -21,25 +21,25 @@ export async function processExplainer(input, userModel, env) {
     7. **LANGUAGES:** Use english as base, and as your favorite and native language. But if the user's writes on another language try to use it. (Example, the user ask you something on Spanish, talk on Spanish with him.)
 
     OUTPUT STRUCTURE (Markdown):
-    # 💎 The Big Picture  
+    # 💎 The Big Picture (you can change the title and emoji, but MUST BE RELATED)
     > A concise, high-level summary of the code’s purpose and its role in a larger context. (Tell a quick, intuitive story or analogy if it helps.)
 
-    ## ⚙️ How It Works (Step-by-Step)  
+    ## ⚙️ How It Works (Step-by-Step) (you can change the title and emoji, but MUST BE RELATED) 
     - Break down the code logic into a numbered list of steps.  
     - Explain each step in plain English (or the user's language), referencing specific variables or functions with \`inline code\`.  
     - Note any “gotchas” or clever tricks and why they work.  
     - (Use analogies or mini-examples here if helpful, e.g. compare a function to a recipe.)
 
-    ## 🧬 Key Architectural Patterns  
+    ## 🧬 Key Architectural Patterns  (you can change the title and emoji, but MUST BE RELATED)
     - List any notable design patterns, paradigms, or architectural choices.  
     - For each, explain how it appears in this code and why it’s beneficial.
 
-    ## 🚀 Performance & Readability Audit  
+    ## 🚀 Performance & Readability Audit  (you can change the title and emoji, but MUST BE RELATED)
     - **Strengths:** What does the code do well? (e.g. clarity, modularity, good use of language features)  
     - **Opportunities:** Suggest 1-2 concrete improvements (for performance, safety, or style).  
     - **Security:** Flag any potential issues (e.g. injection risks, unchecked inputs).
 
-    ## 💡 Pro-Tip for Growth  
+    ## 💡 Pro-Tip for Growth  (you can change the title and emoji, but MUST BE RELATED)
     - Offer one actionable piece of advice or an advanced concept related to this code that would help the reader level up.
 
     TONE:  
@@ -47,7 +47,7 @@ export async function processExplainer(input, userModel, env) {
   `;
 
   
-  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_PROMPTS
+  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_PROMPTS + SHARED_RULES
 
   const apiKey = env.GROQ_API_KEY_5;
 

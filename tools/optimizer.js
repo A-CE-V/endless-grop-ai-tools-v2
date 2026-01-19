@@ -1,5 +1,5 @@
 import { handleAIRequest } from "../utils/ai.js";
-import { SHARED_PROMPTS } from "../config.js";
+import { SHARED_PROMPTS, SHARED_RULES } from "../config.js";
 
 export async function processOptimizer(input, userModel, env) {
   const SYSTEM_PROMPT = `
@@ -26,7 +26,7 @@ export async function processOptimizer(input, userModel, env) {
         Return ONLY the optimized source code.
         `;
 
-  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_PROMPTS
+  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_RULES;
 
 
   // Explicitly use Key 3

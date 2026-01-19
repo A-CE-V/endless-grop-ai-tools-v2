@@ -1,5 +1,5 @@
 // tools/commentAdder.js
-import { SHARED_PROMPTS } from "../config.js";
+import { SHARED_PROMPTS, SHARED_RULES } from "../config.js";
 import { handleAIRequest } from "../utils/ai.js";
 
 export async function processCommentAdder(input, userModel, env = process.env, options = {}) {
@@ -60,7 +60,7 @@ export async function processCommentAdder(input, userModel, env = process.env, o
     METADATA:
     ${author && author !== "" ? `- Author: ${author}` : ""}
     ${date ? `- Date: ${date}` : ""}
-    (STRICT RULE: If both author and date are "" IGNORE THE METADATA AT THE TOP. JUST DON'T ADD IT, SKIP IT. BUT REMEMBER IF BOTH VALUES ARE EMPTY.)
+    (STRICT RULE: If both author and date are "" or DATE IT'S "" AND AUTHOR IT'S UNKNOWN IGNORE THE METADATA AT THE TOP. JUST DON'T ADD IT, SKIP IT. BUT REMEMBER IF BOTH VALUES ARE EMPTY.)
 
     STRICT OUTPUT RULES:
     - Return ONLY the commented source code
@@ -68,8 +68,8 @@ export async function processCommentAdder(input, userModel, env = process.env, o
     - No explanations outside the code
     `;
   
-  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_PROMPTS
+  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_RULES;
 
   const apiKey = env.GROQ_API_KEY_2;
-  return await handleAIRequest(apiKey, FINAL_PROMPT, input, userModel);
+  return await handleAIRequest(apiKey, FINAL_PROMPT, input, userModel, 0.1);
 }

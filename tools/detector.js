@@ -1,5 +1,5 @@
 import { handleAIRequest } from "../utils/ai.js";
-import { SHARED_PROMPTS } from "../config.js";
+import { SHARED_PROMPTS, SHARED_RULES } from "../config.js";
 
 export async function processDetector(input, userModel, env) {
   // 1. Enforce a stronger model for detection if possible
@@ -37,7 +37,7 @@ export async function processDetector(input, userModel, env) {
     - Return ONLY valid JSON.
   `;
 
-  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_PROMPTS
+  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_RULES;
 
   const apiKey = env.GROQ_API_KEY_4;
   return await handleAIRequest(apiKey, FINAL_PROMPT, input, modelToUse, 0.5);
