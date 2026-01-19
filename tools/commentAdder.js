@@ -1,9 +1,21 @@
 // tools/commentAdder.js
 import { handleAIRequest } from "../utils/ai.js";
 
-export async function processCommentAdder(input, userModel, env = process.env, author = "Unknown", date = "", includeParamTags = false) {
-
+export async function processCommentAdder(input, userModel, env = process.env, options = {}) {
+  const {
+    author = "Unknown",
+    date = "",
+    includeParamTags = false
+  } = options;
+  
   let docRequirements = "";
+
+  console.log("CommentAdder payload:", {
+    author,
+    date,
+    includeParamTags
+  });
+
 
   if (author && author !== "Unknown") {
     docRequirements += `\n- Author: ${author}`;

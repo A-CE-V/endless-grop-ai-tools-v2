@@ -22,7 +22,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 
-app.use("/api", express.raw({ type: "*/*", limit: "5mb" }));
+app.use("/api", express.json({ limit: "5mb" }));
 
 app.get("/health", (req, res) => {
   res.json({
@@ -38,9 +38,22 @@ app.post("/api/:tool", verifyInternalKey, async (req, res) => {
   try {
     const toolPath = `/api/${req.params.tool}`;
 
-    const bodyText = req.body && req.body.length ? req.body.toString("utf8") : "";
-    const body = bodyText ? JSON.parse(bodyText) : {};
-    const { input, userModel, author, date, includeParamTags } = body;
+  
+    const { input, userModel, author, date, includeParamTags } = req.body;
+
+    const normalizedAuthor =
+      typeof author === "string" && author.trim()
+        ? author.trim()
+        : "Unknown";
+
+    const normalizedDate =
+      typeof date === "string" && date.trim()
+        ? date.trim()
+        : "";
+
+    const normalizedIncludeParamTags =
+      includeParamTags === true || includeParamTags === "true";
+
 
     if (!input) throw new Error("Input payload is required");
 
@@ -87,7 +100,7 @@ app.post("/api/:tool", verifyInternalKey, async (req, res) => {
 
       case "/api/comment-adder":
         toolName = "commentAdd";
-        resultData = await processCommentAdder(input, userModel, process.env, {author, date, includeParamTags});
+        resultData = await processCommentAdder(input, userModel, process.env, { author: normalizedAuthor, date: normalizedDate, includeParamTags: normalizedIncludeParamTags});
         break;
 
       default:
