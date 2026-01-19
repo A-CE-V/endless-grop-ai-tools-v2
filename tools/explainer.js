@@ -1,5 +1,7 @@
 // tools/explainer.js
+import { SHARED_PROMPTS } from "../config.js";
 import { handleAIRequest } from "../utils/ai.js";
+
 
 export async function processExplainer(input, userModel, env) {
   const SYSTEM_PROMPT = `
@@ -44,9 +46,10 @@ export async function processExplainer(input, userModel, env) {
     Friendly, conversational, and encouraging – imagine explaining this over coffee to a peer.  Use simple, clear language (explain any jargon).  Avoid dry formality; vary your phrasing to sound natural.  Inject a light analogy or example and ask a couple of engaging questions to involve the reader.  Use **bold** for emphasis and emojis sparingly (and *vary* them so it doesn’t feel repetitive).  
   `;
 
+  
+  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_PROMPTS
 
   const apiKey = env.GROQ_API_KEY_5;
 
-  // We increase temperature slightly to 0.7-0.8 for more "natural" teaching language
-  return await handleAIRequest(apiKey, SYSTEM_PROMPT, input, userModel);
+  return await handleAIRequest(apiKey, FINAL_PROMPT, input, userModel, 0.8);
 }

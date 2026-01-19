@@ -1,11 +1,12 @@
 import { handleAIRequest } from "../utils/ai.js";
+import { SHARED_PROMPTS } from "../config.js";
 
 export async function processOptimizer(input, userModel, env) {
   const SYSTEM_PROMPT = `
         You are a senior performance-focused software engineer.
 
         TASK:
-        Optimize the provided code.
+        Optimize the provided code. IF THE REQUEST DOESNT LOOK LIKE CODE JUST REPLY TO THE USER: "Request not valid. Please write code to optimize" (or something similar and Ignore all the prompts below JUST in this case.)
 
         OPTIMIZE FOR:
         - Performance
@@ -25,9 +26,11 @@ export async function processOptimizer(input, userModel, env) {
         Return ONLY the optimized source code.
         `;
 
+  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_PROMPTS
+
 
   // Explicitly use Key 3
   const apiKey = env.GROQ_API_KEY_3;
 
-  return await handleAIRequest(apiKey, SYSTEM_PROMPT, input, userModel);
+  return await handleAIRequest(apiKey, FINAL_PROMPT, input, userModel);
 }

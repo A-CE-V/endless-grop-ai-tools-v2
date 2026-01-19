@@ -1,3 +1,4 @@
+import { SHARED_PROMPTS } from "../config.js";
 import { handleAIRequest } from "../utils/ai.js";
 
 export async function processCommentRemover(input, userModel, env) {
@@ -5,7 +6,7 @@ export async function processCommentRemover(input, userModel, env) {
     You are a professional source-code parser.
 
     TASK:
-    Remove ALL comments from the provided code.
+    Remove ALL comments from the provided code.  IF THE REQUEST DOESNT LOOK LIKE CODE JUST REPLY TO THE USER: "Request not valid. Please write code to optimize" (or something similar and Ignore all the prompts below JUST in this case.)
 
     RULES:
     - Remove single-line comments (//, #)
@@ -24,9 +25,9 @@ export async function processCommentRemover(input, userModel, env) {
     Return ONLY the cleaned raw source code.
     `;
 
+  const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_PROMPTS
+  
 
-  // Explicitly use Key 1
   const apiKey = env.GROQ_API_KEY_1;
-
-  return await handleAIRequest(apiKey, SYSTEM_PROMPT, input, userModel);
+  return await handleAIRequest(apiKey, FINAL_PROMPT, input, userModel);
 }
