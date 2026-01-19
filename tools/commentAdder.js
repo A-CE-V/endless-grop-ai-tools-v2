@@ -2,30 +2,47 @@
 import { handleAIRequest } from "../utils/ai.js";
 
 export async function processCommentAdder(input, userModel, env = process.env, options = {}) {
-  const { author = "Unknown", date = "WithoutDate", includeParamTags = false } = options;
-  
+  const { 
+    author = "Unknown", 
+    date = "", 
+    includeParamTags = false 
+  } = options;
+
+  // Build documentation requirements dynamically
+  let docRequirements = "";
+
+  // Only add Author requirement if it's not "Unknown" or empty
+  if (author && author !== "Unknown") {
+    docRequirements += `\n- Author: ${author}`;
+  }
+
+  // Only add Date requirement if a date was actually selected
+  if (date && (date !== "WithoutDate" && date !== "")) {
+    docRequirements += `\n- Date: ${date}`;
+  }
+
+  // Add JSDoc/DocBlock tags if requested
+  if (includeParamTags) {
+    docRequirements += `\n- Include technical tags (e.g., @param {type} name, @returns {type}) for all functions.`;
+  }
 
   const SYSTEM_PROMPT = `
-        You are a senior software engineer writing production-quality comments.
+    You are a senior software engineer writing production-quality comments.
 
-        TASK:
-        Add concise, meaningful, useful comments to the code.
+    TASK:
+    Add concise, meaningful, useful comments to the code.
 
-        RULES:
-        - Add comments ABOVE Functions, Classes, and Complex blocks.
-        - Do NOT comment obvious lines.
-        - Use the language's native comment style.
-        - Each function comment must include:
-          - Purpose (1-3 sentence(s))
-          - Author: ${author} (skip this field if author value == "Unknown")
-          - Date: ${date} (skip this field if date value == "WithoutDate")
-        ${includeParamTags ? "- Include technical tags (e.g., @param {type} name, @returns {type}) for all parameters and return values." : ""}
+    RULES:
+    - Add comments ABOVE Functions, Classes, and Complex blocks.
+    - Do NOT comment obvious lines.
+    - Use the language's native comment style (e.g., JSDoc for JS, Docstrings for Python).
+    ${docRequirements}
 
-        STRICT OUTPUT RULES:
-        - Return ONLY the commented source code
-        - No markdown code fences
-        - No explanations
-        `;
+    STRICT OUTPUT RULES:
+    - Return ONLY the commented source code
+    - No markdown code fences (no \`\`\`)
+    - No explanations outside the code
+  `;
 
   const apiKey = env.GROQ_API_KEY_2;
   return await handleAIRequest(apiKey, SYSTEM_PROMPT, input, userModel);
