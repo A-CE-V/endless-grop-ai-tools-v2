@@ -54,10 +54,7 @@ export async function processCommentAdder(input, userModel, env = process.env, o
     - This file-level comment MUST include all provided metadata.
     - Do NOT repeat author or date anywhere else.
 
-    PARAMETER TAG RULES:
-    ${includeParamTags
-      ? "- Include technical tags (e.g., @param {type} name, @returns {type}) for all functions."
-      : "- Do NOT include technical tags (e.g., @param, @returns)."
+    ${docRequirements
     }
 
     METADATA:
