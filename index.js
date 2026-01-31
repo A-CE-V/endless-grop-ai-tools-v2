@@ -9,12 +9,12 @@ import { MAX_LIMITS } from "./config.js";
 import { detectLanguage } from "./utils/languageDetector.js";
 import { validateInput } from "./helpers/inputValidator.js";
 
-// tools
 import { processDetector } from "./tools/detector.js";
 import { processOptimizer } from "./tools/optimizer.js";
 import { processCommentRemover } from "./tools/commentRemover.js";
 import { processCommentAdder } from "./tools/commentAdder.js";
 import { processExplainer } from "./tools/explainer.js";
+import { processHumanizer } from "./tools/humanizer.js";
 
 import { verifyInternalKey } from "./auth/internalApiKeyHandler.js";
 
@@ -105,6 +105,12 @@ app.post("/api/:tool", verifyInternalKey, async (req, res) => {
       case "/api/explainer":
         toolName = "explainer";
         resultData = await processExplainer(input, userModel, process.env);
+        break;
+      
+      case "/api/humanizer":
+        toolName = "explainer";
+        const { personality } = req.body;
+        resultData = await processHumanizer(input, userModel, process.env, {personality});
         break;
 
       case "/api/comment-adder":
