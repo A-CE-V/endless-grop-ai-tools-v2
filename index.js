@@ -47,7 +47,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.post("/api/:tool", verifyInternalKey, async (req, res) => {
+app.post("/api/*", verifyInternalKey, async (req, res) => {
   const startTime = performance.now();
   try {
     const toolPath = `/api/${req.params.tool}`;
