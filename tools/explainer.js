@@ -44,7 +44,7 @@ export async function processExplainer(input, userModel, env) {
 
     TONE:  
     Friendly, conversational, and encouraging – imagine explaining this over coffee to a peer.  Use simple, clear language (explain any jargon).  Avoid dry formality; vary your phrasing to sound natural.  Inject a light analogy or example and ask a couple of engaging questions to involve the reader.  Use **bold** for emphasis and emojis sparingly (and *vary* them so it doesn’t feel repetitive).  
-  `;
+    `;
 
   
   const FINAL_PROMPT = SYSTEM_PROMPT + SHARED_PROMPTS + SHARED_RULES

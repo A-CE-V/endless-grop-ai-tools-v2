@@ -16,6 +16,11 @@ import { processCommentAdder } from "./tools/commentAdder.js";
 import { processExplainer } from "./tools/explainer.js";
 import { processHumanizer } from "./tools/humanizer.js";
 
+import { editComments } from "./tools/spiralCommentEditor.js";
+import { explainCode} from "./tools/spiralExplainer.js"
+import { optimizeCode } from "./tools/spiralOptimizer.js";
+import { enhanceText } from "./tools/spiralTextEnhancer.js"
+
 import { verifyInternalKey } from "./auth/internalApiKeyHandler.js";
 
 const app = express();
@@ -116,6 +121,26 @@ app.post("/api/:tool", verifyInternalKey, async (req, res) => {
       case "/api/comment-adder":
         toolName = "commentAdd";
         resultData = await processCommentAdder(input, userModel, process.env, { author: normalizedAuthor, date: normalizedDate, includeParamTags: normalizedIncludeParamTags});
+        break;
+
+      case "/api/v2/optimizer":
+        toolName = "optimizer";
+        resultData = await optimizeCode(input, userModel, process.env);
+        break;
+      
+      case "/api/v2/text-enhancer":
+        toolName = "text-enhancer";
+        resultData = await enhanceText(input, userModel, process.env);
+        break;
+      
+      case "/api/v2/explainer":
+        toolName = "explainer";
+        resultData = await explainCode(input, userModel, process.env);
+        break;
+
+      case "/api/v2/comment-editor":
+        toolName = "comment-editor";
+        resultData = await editComments(input, userModel, process.env);
         break;
 
       default:
