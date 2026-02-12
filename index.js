@@ -47,7 +47,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.post("/api/:any*", verifyInternalKey, async (req, res) => {
+app.post(/^\/api\/.*/, verifyInternalKey, async (req, res) => {
   const startTime = performance.now();
   try {
     const toolPath = req.path;
@@ -113,7 +113,7 @@ app.post("/api/:any*", verifyInternalKey, async (req, res) => {
         break;
       
       case "/api/humanizer":
-        toolName = "explainer";
+        toolName = "humanizer";
         const { personality } = req.body;
         resultData = await processHumanizer(input, userModel, process.env, {personality});
         break;
