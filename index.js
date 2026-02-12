@@ -50,7 +50,7 @@ app.get("/health", (req, res) => {
 app.post("/api/*", verifyInternalKey, async (req, res) => {
   const startTime = performance.now();
   try {
-    const toolPath = `/api/${req.params.tool}`;
+    const toolPath = req.path;
 
   
     const { input, userModel, author, date, includeParamTags } = req.body;
