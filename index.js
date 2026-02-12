@@ -47,7 +47,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.post("/api/*", verifyInternalKey, async (req, res) => {
+app.post("/api/(.*)", verifyInternalKey, async (req, res) => {
   const startTime = performance.now();
   try {
     const toolPath = req.path;
@@ -129,7 +129,7 @@ app.post("/api/*", verifyInternalKey, async (req, res) => {
         break;
       
       case "/api/v2/text-enhancer":
-        toolName = "text-enhancer";
+        toolName = "textEnhancer";
         resultData = await enhanceText(input, userModel, process.env);
         break;
       
@@ -139,7 +139,7 @@ app.post("/api/*", verifyInternalKey, async (req, res) => {
         break;
 
       case "/api/v2/comment-editor":
-        toolName = "comment-editor";
+        toolName = "commentEditor";
         resultData = await editComments(input, userModel, process.env);
         break;
 
