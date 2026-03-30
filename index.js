@@ -86,7 +86,10 @@ app.post(/^\/api\/.*/, verifyInternalKey, async (req, res) => {
           const raw = await processDetector(input, userModel, process.env);
           let parsed;
           try {
-            parsed = JSON.parse(raw.content);
+            // Extract JSON object even if wrapped in text/markdown
+            const jsonMatch = raw.content.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) throw new Error("No JSON object found in response");
+            parsed = JSON.parse(jsonMatch[0]);
           } catch (e) {
             throw new Error("Detector returned invalid JSON");
           }

@@ -1,4 +1,8 @@
 // helpers/codeFencesRemover.js
 export function stripMarkdownCodeFences(text) {
-  return text.replace(/^```[\w-]*\n/, "").replace(/\n```$/, "");
+  return text
+    .trim()
+    .replace(/^```[\w-]*\r?\n/, "")  // opening fence
+    .replace(/\r?\n```\s*$/, "")     // closing fence
+    .trim();
 }
